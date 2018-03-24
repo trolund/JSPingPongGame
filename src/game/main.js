@@ -6,10 +6,12 @@ var game = new Phaser.Game(window.innerWidth, window.innerHeight, Phaser.CANVAS,
 });
 
 
-
 function preload() {
     game.load.image('paddle', '../../src/img/paddle.png');
     game.load.image('ball', '../../src/img/ball.png');
+
+    game.load.audio('sound', '../../src/audio/numkey.wav');
+    game.load.audio('dead', '../../src/audio/numkey_wrong.wav');
 }
 
 var image;
@@ -28,6 +30,10 @@ var upKey;
 var downKey;
 var wKey;
 var sKey;
+
+var startButton;
+
+var sound;
 
 function create() {
 
@@ -55,9 +61,9 @@ function create() {
     pointsLabel = game.add.text(game.world.centerX - 60, 0, pointText, style);
 
 
-
-
-
+    //	Here we set-up our audio
+    sound = game.add.audio('sound');
+    deadSound = game.add.audio('dead');
 
     game.physics.startSystem(Phaser.Physics.ARCADE);
 
@@ -100,9 +106,22 @@ function create() {
     //  and vertical vectors (as an x,y point). "1" is 100% energy return
     ball.body.bounce.setTo(1, 1);
 
+    ball.body.onCollide = new Phaser.Signal();
+    ball.body.onCollide.add(function () {
+        sound.play();
+    }, this);
 
     BallMove();
+    // startButton = game.add.button(game.world.centerX - 95, 400, 'button', startGame, this, 2, 1, 0);
+
+
+
 }
+
+function startGame() {
+    BallMove();
+}
+
 
 //  Move the knocker with the arrow keys
 function update() {
@@ -112,6 +131,8 @@ function update() {
 
     game.physics.arcade.collide(player2Back, ball, point2);
     game.physics.arcade.collide(player1Back, ball, point1);
+
+
 
     if (upKey.isDown) {
         player1.body.velocity.y = -300;
@@ -129,6 +150,7 @@ function update() {
     } else {
         player2.body.velocity.setTo(0, 0);
     }
+
 
 }
 
@@ -148,12 +170,15 @@ function BallMove() {
 }
 
 function point2(obj1, obj2) {
+    deadSound.play();
     player2Back.body.velocity.setTo(0, 0);
     pointsPlayer2++;
     reset();
+
 }
 
 function point1(obj1, obj2) {
+    deadSound.play();
     player1Back.body.velocity.setTo(0, 0);
     pointsPlayer1++;
     reset();
