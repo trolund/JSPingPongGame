@@ -33,22 +33,26 @@ function create() {
 
     //  Register the keys.
     upKey = game.input.keyboard.addKey(Phaser.Keyboard.LEFT);
-	downKey = game.input.keyboard.addKey(Phaser.Keyboard.RIGHT);
-	wKey = game.input.keyboard.addKey(Phaser.Keyboard.W);
+    downKey = game.input.keyboard.addKey(Phaser.Keyboard.RIGHT);
+    wKey = game.input.keyboard.addKey(Phaser.Keyboard.W);
     sKey = game.input.keyboard.addKey(Phaser.Keyboard.S);
- /*
-    //  Stop the following keys from propagating up to the browser
-    game.input.keyboard.addKeyCapture([ Phaser.Keyboard.LEFT, Phaser.Keyboard.RIGHT, Phaser.Keyboard.W, Phaser.Keyboard.S]);
-    */
+    /*
+       //  Stop the following keys from propagating up to the browser
+       game.input.keyboard.addKeyCapture([ Phaser.Keyboard.LEFT, Phaser.Keyboard.RIGHT, Phaser.Keyboard.W, Phaser.Keyboard.S]);
+       */
     // text with points!
 
     pointsPlayer1 = 0;
     pointsPlayer2 = 0;
 
     var pointText = pointsPlayer1 + " : " + pointsPlayer2;
-    var style = { font: "65px Arial", fill: "#fff", align: "center" };
+    var style = {
+        font: "65px Arial",
+        fill: "#fff",
+        align: "center"
+    };
 
-    pointsLabel = game.add.text(game.world.centerX-60, 0, pointText, style);
+    pointsLabel = game.add.text(game.world.centerX - 60, 0, pointText, style);
 
 
 
@@ -62,22 +66,22 @@ function create() {
     //  This creates a simple sprite that is using our loaded image and
     //  displays it on-screen
     //  and assign it to a variable
-    ball = game.add.sprite(window.innerWidth/2 -16, window.innerHeight / 2 -16, 'ball');
+    ball = game.add.sprite(window.innerWidth / 2 - 16, window.innerHeight / 2 - 16, 'ball');
     // add players
     player1 = game.add.sprite(window.innerWidth - 100, window.innerHeight / 2, 'paddle');
     player2 = game.add.sprite(100, window.innerHeight / 2, 'paddle');
 
-    player1Back = game.add.sprite(window.innerWidth-5, 0, 'paddle');
-    player1Back.scale.set(0.1,10);
+    player1Back = game.add.sprite(window.innerWidth - 5, 0, 'paddle');
+    player1Back.scale.set(0.1, 10);
 
     player2Back = game.add.sprite(0, 0, 'paddle');
-    player2Back.scale.set(0.1,10);
+    player2Back.scale.set(0.1, 10);
 
 
-    player1.scale.set(0.3,0.3);
-    player2.scale.set(0.3,0.3);
+    player1.scale.set(0.3, 0.3);
+    player2.scale.set(0.3, 0.3);
 
-    ball.scale.set(1,1);
+    ball.scale.set(1, 1);
 
     game.physics.enable([player1, player2, ball], Phaser.Physics.ARCADE, true);
 
@@ -113,19 +117,16 @@ function update() {
         player1.body.velocity.y = -300;
     } else if (downKey.isDown) {
         player1.body.velocity.y = 300;
-    }
-    else {
+    } else {
         player1.body.velocity.setTo(0, 0);
     }
 
 
-    if(sKey.isDown) {
+    if (sKey.isDown) {
         player2.body.velocity.y = 300;
-    }
-    else if(wKey.isDown){
+    } else if (wKey.isDown) {
         player2.body.velocity.y = -300;
-    }
-    else {
+    } else {
         player2.body.velocity.setTo(0, 0);
     }
 
@@ -133,7 +134,7 @@ function update() {
 
 function render() {
     //debug helper
-   // game.debug.spriteInfo(ball, 32, 32);
+    // game.debug.spriteInfo(ball, 32, 32);
 
 }
 
@@ -146,24 +147,24 @@ function BallMove() {
     }
 }
 
-function point2(obj1, obj2){
+function point2(obj1, obj2) {
     player2Back.body.velocity.setTo(0, 0);
     pointsPlayer2++;
     reset();
 }
-function point1(obj1, obj2){
+
+function point1(obj1, obj2) {
     player1Back.body.velocity.setTo(0, 0);
     pointsPlayer1++;
     reset();
 }
 
-function reset(){
+function reset() {
     ball.body.velocity.setTo(0, 0);
-    ball.body.x = game.world.centerX-15;
-    ball.body.y = game.world.centerY-15;
-    player1Back.x = window.innerWidth-5;
+    ball.body.x = game.world.centerX - 15;
+    ball.body.y = game.world.centerY - 15;
+    player1Back.x = window.innerWidth - 5;
     player2Back.x = 0;
     pointsLabel.setText(pointsPlayer1 + " : " + pointsPlayer2);
     game.time.events.add(Phaser.Timer.SECOND * 2, BallMove, this);
 }
-
