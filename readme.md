@@ -1,4 +1,4 @@
-## clasic Ping pong game using Phaser
+## Classic Ping pong game using Phaser
 
-small Ping Pong game.
+Small Classic Ping Pong game made with Phaser.
 
