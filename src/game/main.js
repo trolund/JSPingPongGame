@@ -14,7 +14,7 @@ function preload() {
     game.load.audio('dead', '../../src/audio/numkey_wrong.wav');
 }
 
-var image;
+//var image;
 
 var player1Back;
 var player2Back;
@@ -31,6 +31,8 @@ var downKey;
 var wKey;
 var sKey;
 
+var serveKey;
+
 var startButton;
 
 var sound;
@@ -42,6 +44,8 @@ function create() {
     downKey = game.input.keyboard.addKey(Phaser.Keyboard.RIGHT);
     wKey = game.input.keyboard.addKey(Phaser.Keyboard.W);
     sKey = game.input.keyboard.addKey(Phaser.Keyboard.S);
+
+    serveKey = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
     /*
        //  Stop the following keys from propagating up to the browser
        game.input.keyboard.addKeyCapture([ Phaser.Keyboard.LEFT, Phaser.Keyboard.RIGHT, Phaser.Keyboard.W, Phaser.Keyboard.S]);
@@ -151,7 +155,9 @@ function update() {
         player2.body.velocity.setTo(0, 0);
     }
 
-
+    if (serve && serveKey.isDown) {
+        BallMove();
+    }
 }
 
 function render() {
@@ -160,13 +166,17 @@ function render() {
 
 }
 
+var serve = false;
+
 function BallMove() {
     if (Math.random() >= 0.5) {
         //  This gets it moving
-        ball.body.velocity.setTo(400, 400);
+        ball.body.velocity.setTo(game.rnd.integerInRange(350, 450), game.rnd.integerInRange(350, 450));
     } else {
-        ball.body.velocity.setTo(-400, -400);
+        ball.body.velocity.setTo(game.rnd.integerInRange(-350, -450), game.rnd.integerInRange(-350, -450));
     }
+
+    serve = false;
 }
 
 function point2(obj1, obj2) {
@@ -191,5 +201,6 @@ function reset() {
     player1Back.x = window.innerWidth - 5;
     player2Back.x = 0;
     pointsLabel.setText(pointsPlayer1 + " : " + pointsPlayer2);
-    game.time.events.add(Phaser.Timer.SECOND * 2, BallMove, this);
+    serve = true;
+    // game.time.events.add(Phaser.Timer.SECOND * 2, BallMove, this);
 }
