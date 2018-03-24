@@ -9,9 +9,11 @@ var game = new Phaser.Game(window.innerWidth, window.innerHeight, Phaser.CANVAS,
 function preload() {
     game.load.image('paddle', '../../src/img/paddle.png');
     game.load.image('ball', '../../src/img/ball.png');
+    game.load.image('playbtn', '../../src/img/playbtn.png');
 
     game.load.audio('sound', '../../src/audio/numkey.wav');
     game.load.audio('dead', '../../src/audio/numkey_wrong.wav');
+    game.load.audio('serve', '../../src/audio/key.wav');
 }
 
 //var image;
@@ -36,6 +38,10 @@ var serveKey;
 var startButton;
 
 var sound;
+
+var paddleSpeed = 600;
+
+var playbtn;
 
 function create() {
 
@@ -62,12 +68,13 @@ function create() {
         align: "center"
     };
 
-    pointsLabel = game.add.text(game.world.centerX - 60, 0, pointText, style);
+    pointsLabel = game.add.text(game.world.centerX - 70, 0, pointText, style);
 
 
     //	Here we set-up our audio
     sound = game.add.audio('sound');
     deadSound = game.add.audio('dead');
+    serveSound = game.add.audio('serve');
 
     game.physics.startSystem(Phaser.Physics.ARCADE);
 
@@ -115,7 +122,11 @@ function create() {
         sound.play();
     }, this);
 
-    BallMove();
+
+    playbtn = game.add.button(game.world.centerX - 100, 400, 'playbtn', startGame, this, 2, 0.1, 0);
+    playbtn.scale.setTo(0.5, 0.5);
+    playbtn.onInputOver.add(over, this);
+
     // startButton = game.add.button(game.world.centerX - 95, 400, 'button', startGame, this, 2, 1, 0);
 
 
@@ -123,7 +134,12 @@ function create() {
 }
 
 function startGame() {
+    playbtn.destroy();
     BallMove();
+}
+
+function over() {
+
 }
 
 
@@ -139,23 +155,24 @@ function update() {
 
 
     if (upKey.isDown) {
-        player1.body.velocity.y = -300;
+        player1.body.velocity.y = -paddleSpeed;
     } else if (downKey.isDown) {
-        player1.body.velocity.y = 300;
+        player1.body.velocity.y = paddleSpeed;
     } else {
         player1.body.velocity.setTo(0, 0);
     }
 
 
     if (sKey.isDown) {
-        player2.body.velocity.y = 300;
+        player2.body.velocity.y = paddleSpeed;
     } else if (wKey.isDown) {
-        player2.body.velocity.y = -300;
+        player2.body.velocity.y = -paddleSpeed;
     } else {
         player2.body.velocity.setTo(0, 0);
     }
 
     if (serve && serveKey.isDown) {
+        serveSound.play();
         BallMove();
     }
 }
@@ -168,12 +185,16 @@ function render() {
 
 var serve = false;
 
+var min = 500;
+var max = 650;
+
 function BallMove() {
+
     if (Math.random() >= 0.5) {
         //  This gets it moving
-        ball.body.velocity.setTo(game.rnd.integerInRange(350, 450), game.rnd.integerInRange(350, 450));
+        ball.body.velocity.setTo(game.rnd.integerInRange(min, max), game.rnd.integerInRange(min, max));
     } else {
-        ball.body.velocity.setTo(game.rnd.integerInRange(-350, -450), game.rnd.integerInRange(-350, -450));
+        ball.body.velocity.setTo(game.rnd.integerInRange(-min, -max), game.rnd.integerInRange(-min, -max));
     }
 
     serve = false;
