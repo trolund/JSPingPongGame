@@ -10,6 +10,8 @@ function preload() {
     game.load.image('paddle', '../../src/img/paddle.png');
     game.load.image('ball', '../../src/img/ball.png');
     game.load.image('playbtn', '../../src/img/playbtn.png');
+    game.load.image('menubg', '../../src/img/menubg.png');
+    game.load.image('restartbtn', '../../src/img/restartbtn.png');
 
     game.load.audio('sound', '../../src/audio/numkey.wav');
     game.load.audio('dead', '../../src/audio/numkey_wrong.wav');
@@ -42,6 +44,8 @@ var sound;
 var paddleSpeed = 600;
 
 var playbtn;
+
+var menuBg;
 
 function create() {
 
@@ -122,6 +126,8 @@ function create() {
         sound.play();
     }, this);
 
+    menuBg = game.add.sprite(0, 0, 'menubg');
+    menuBg.scale.set(100, 100);
 
     playbtn = game.add.button(game.world.centerX - 100, 400, 'playbtn', startGame, this, 2, 0.1, 0);
     playbtn.scale.setTo(0.5, 0.5);
@@ -129,12 +135,20 @@ function create() {
 
     // startButton = game.add.button(game.world.centerX - 95, 400, 'button', startGame, this, 2, 1, 0);
 
-
+    game.paused = true;
 
 }
 
 function startGame() {
+    pointsPlayer1 = 0;
+    pointsPlayer2 = 0;
+
+    menuBg.destroy();
     playbtn.destroy();
+
+    game.paused = false;
+
+
     BallMove();
 }
 
@@ -224,4 +238,41 @@ function reset() {
     pointsLabel.setText(pointsPlayer1 + " : " + pointsPlayer2);
     serve = true;
     // game.time.events.add(Phaser.Timer.SECOND * 2, BallMove, this);
+
+    if (pointsPlayer1 >= 10) {
+        console.log('player 1 wins!');
+        win('player 1 wins!');
+    } else if (pointsPlayer2 >= 10) {
+        console.log('player 2 wins!');
+        win('player 2 wins!');
+    } else {
+        console.log(pointsPlayer1 + " : " + pointsPlayer2);
+    }
+
+}
+
+function win(winner) {
+    var style = {
+        font: "65px Arial",
+        fill: "#ffffff",
+        align: "center"
+    };
+
+    menuBg = game.add.sprite(0, 0, 'menubg');
+    menuBg.scale.set(100, 100);
+
+    winnerText = game.add.text(game.world.centerX, game.world.centerY, winner, style);
+    winnerText.anchor.setTo(0.5, 0.5);
+    restartbtn = game.add.button(game.world.centerX - 100, 280, 'restartbtn', function () {
+        pointsPlayer1 = 0;
+        pointsPlayer2 = 0;
+        pointsLabel.setText("0 : 0");
+        restartbtn.destroy();
+        winnerText.destroy();
+        menuBg.destroy();
+        startGame();
+    }, this, 2, 0.1, 0);
+    restartbtn.scale.setTo(0.5, 0.5);
+    game.paused = true;
+
 }
