@@ -7,16 +7,19 @@ var game = new Phaser.Game(window.innerWidth, window.innerHeight, Phaser.CANVAS,
 
 
 function preload() {
-    game.load.image('paddle', '../../src/img/paddle.png');
-    game.load.image('ball', '../../src/img/ball.png');
-    game.load.image('playbtn', '../../src/img/playbtn.png');
-    game.load.image('menubg', '../../src/img/menubg.png');
-    game.load.image('restartbtn', '../../src/img/restartbtn.png');
 
-    game.load.audio('sound', '../../src/audio/numkey.wav');
-    game.load.audio('dead', '../../src/audio/numkey_wrong.wav');
-    game.load.audio('serve', '../../src/audio/key.wav');
+    game.load.image('paddle', '../src/img/paddle.png');
+    game.load.image('ball', '../src/img/ball.png');
+    game.load.image('playbtn', '../src/img/playbtn.png');
+    game.load.image('menubg', '../src/img/menubg.png');
+    game.load.image('restartbtn', '../src/img/restartbtn.png');
+
+    game.load.audio('sound', '../src/audio/numkey.wav');
+    game.load.audio('dead', '../src/audio/numkey_wrong.wav');
+    game.load.audio('serve', '../src/src/audio/key.wav');
 }
+
+
 
 //var image;
 
