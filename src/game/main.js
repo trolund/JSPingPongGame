@@ -11,7 +11,7 @@ function preload() {
     game.load.image('paddle', 'src/img/paddle.png');
     game.load.image('ball', 'src/img/ball.png');
     game.load.image('playbtn', 'src/img/playbtn.png');
-    game.load.image('menubg', 'src/img/menubg.png');
+    game.load.image('menubg', 'src/img/menuBg.png');
     game.load.image('restartbtn', 'src/img/restartbtn.png');
 
     game.load.audio('sound', 'src/audio/numkey.wav');
