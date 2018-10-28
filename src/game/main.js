@@ -10,9 +10,15 @@ function preload() {
 
     game.load.image('paddle', 'src/img/paddle.png');
     game.load.image('ball', 'src/img/ball.png');
-    game.load.image('playbtn', 'src/img/playbtn.png');
+    game.load.image('playbtn', 'src/img/Singelplaybtn.png');
     game.load.image('menubg', 'src/img/menuBg.png');
     game.load.image('restartbtn', 'src/img/restartbtn.png');
+    game.load.image('Mplaybtn', 'src/img/multiplaybtn.png');
+
+    game.load.image('Easybtn', 'src/img/Easybtn.png');
+    game.load.image('medibtn', 'src/img/medibtn.png');
+    game.load.image('hardbtn', 'src/img/hardbtn.png');
+    game.load.image('unbeatablebtn', 'src/img/unbeatablebtn.png');
 
     game.load.audio('sound', 'src/audio/numkey.wav');
     game.load.audio('dead', 'src/audio/numkey_wrong.wav');
@@ -47,8 +53,12 @@ var sound;
 var paddleSpeed = 600;
 
 var playbtn;
+var singelplayerbtn;
 
 var menuBg;
+
+var singelplayermode = false;
+var AImode = 3;
 
 function create() {
 
@@ -132,14 +142,159 @@ function create() {
     menuBg = game.add.sprite(0, 0, 'menubg');
     menuBg.scale.set(100, 100);
 
-    playbtn = game.add.button(game.world.centerX - 100, 400, 'playbtn', startGame, this, 2, 0.1, 0);
+    ShowMainMenu();
+}
+
+function ShowMainMenu(){
+    game.paused = true;
+    playbtn = game.add.button(game.world.centerX - 100, 400, 'Mplaybtn', startGame, this, 2, 0.1, 0);
     playbtn.scale.setTo(0.5, 0.5);
     playbtn.onInputOver.add(over, this);
 
-    // startButton = game.add.button(game.world.centerX - 95, 400, 'button', startGame, this, 2, 1, 0);
+    singelplayerbtn = game.add.button(game.world.centerX - 100, 340, 'playbtn', startGameSingelplayermode, this, 2, 0.1, 0);
+    singelplayerbtn.scale.setTo(0.5, 0.5);
+    singelplayerbtn.onInputOver.add(over, this);
+}
 
-    game.paused = true;
+function over(){
 
+}
+
+function startGameSingelplayermode() {
+    singelplayermode = true;
+
+    destroyMainMenu();
+
+    easyAIbtn = game.add.button(game.world.centerX - 100, 300, 'Easybtn', function(){ AImode = 1; console.log('AI mode: ' + AImode); destroyAImenu(); menuBg.destroy();}, this, 2, 0.1, 0);
+    easyAIbtn.scale.setTo(0.5, 0.5);
+    easyAIbtn.onInputOver.add(over, this);
+
+    mediumAIbtn = game.add.button(game.world.centerX - 100, 400, 'medibtn', function(){ AImode = 2; console.log('AI mode: ' + AImode); destroyAImenu(); menuBg.destroy();}, this, 2, 0.1, 0);
+    mediumAIbtn.scale.setTo(0.5, 0.5);
+    mediumAIbtn.onInputOver.add(over, this);
+
+    HardAIbtn = game.add.button(game.world.centerX - 100, 500, 'hardbtn', function(){ AImode = 3; console.log('AI mode: ' + AImode); destroyAImenu(); menuBg.destroy();}, this, 2, 0.1, 0);
+    HardAIbtn.scale.setTo(0.5, 0.5);
+    HardAIbtn.onInputOver.add(over, this);
+
+    unbeatableAIbtn = game.add.button(game.world.centerX - 100, 600, 'unbeatablebtn', function(){ AImode = 4; console.log('AI mode: ' + AImode); destroyAImenu(); menuBg.destroy();}, this, 2, 0.1, 0);
+    unbeatableAIbtn.scale.setTo(0.5, 0.5);
+    unbeatableAIbtn.onInputOver.add(over, this);
+}
+
+function destroyAImenu(){
+        easyAIbtn.destroy();
+        mediumAIbtn.destroy();
+        HardAIbtn.destroy();
+        unbeatableAIbtn.destroy();
+
+        startGame();
+}
+
+function singlelpayerAI() {
+    switch (AImode) {
+        case 1:
+            AImodeEasy() // easy!
+            break;
+        case 2:
+            AImodeMedimum(); // medium
+            break;
+        case 3:
+            AImodeHard(); // hard
+            break;
+        default:
+            player2.body.y = ball.body.y - 50; // unbeatable
+    }
+
+}
+
+var serveCounter = 0;
+
+function AImodeHard() {
+    playerY = player2.body.y;
+    ballY = ball.body.y;
+    moveSpeed = 10;
+
+    if (ballY - 20 < playerY && playerY < ballY + 20) {
+        console.log('stå stille!');
+    } else {
+
+        if (playerY < ballY) {
+            num = Math.floor(Math.random() * 100) + 5;
+
+            if (num > 5) {
+                player2.body.y += moveSpeed;
+            } else {
+                player2.body.y -= moveSpeed;
+            }
+        } else {
+            num = Math.floor(Math.random() * 100) + 5;
+
+            if (num > 5) {
+                player2.body.y -= moveSpeed;
+            } else {
+                player2.body.y += moveSpeed;
+            }
+        }
+    }
+}
+
+function AImodeMedimum() {
+    playerY = player2.body.y;
+    ballY = ball.body.y;
+    moveSpeed = 9;
+
+    if (ballY - 20 < playerY && playerY < ballY + 20) {
+        console.log('stå stille!');
+    } else {
+
+        if (playerY < ballY) {
+            num = Math.floor(Math.random() * 72) + 5;
+
+            if (num > 5) {
+                player2.body.y += moveSpeed;
+            } else {
+                player2.body.y -= moveSpeed;
+            }
+        } else {
+            num = Math.floor(Math.random() * 72) + 5;
+
+            if (num > 5) {
+                player2.body.y -= moveSpeed;
+            } else {
+                player2.body.y += moveSpeed;
+            }
+        }
+    }
+}
+
+function AImodeEasy(){
+    playerY = player2.body.y;
+    ballY = ball.body.y;
+    moveSpeed = 7;
+
+    if (ballY - 20 < playerY && playerY < ballY + 20) {
+        console.log('stå stille!');
+    } else {
+
+        if (playerY < ballY) {
+            num = Math.floor(Math.random() * 63) + 5;
+
+            if (num > 5) {
+                player2.body.y += moveSpeed;
+            } else {
+                player2.body.y -= moveSpeed;
+            }
+        } else {
+            num = Math.floor(Math.random() * 63) + 5;
+
+            if (num > 5) {
+                player2.body.y -= moveSpeed;
+            } else {
+                player2.body.y += moveSpeed;
+            }
+        }
+    }
 }
 
 function startGame() {
@@ -148,6 +303,7 @@ function startGame() {
 
     menuBg.destroy();
     playbtn.destroy();
+    singelplayerbtn.destroy();
 
     game.paused = false;
 
@@ -155,8 +311,11 @@ function startGame() {
     BallMove();
 }
 
-function over() {
 
+
+function destroyMainMenu() {
+    playbtn.destroy();
+    singelplayerbtn.destroy();
 }
 
 
@@ -180,18 +339,22 @@ function update() {
     }
 
 
-    if (sKey.isDown) {
-        player2.body.velocity.y = paddleSpeed;
-    } else if (wKey.isDown) {
-        player2.body.velocity.y = -paddleSpeed;
+    if (!singelplayermode) {
+        if (sKey.isDown) {
+            player2.body.velocity.y = paddleSpeed;
+        } else if (wKey.isDown) {
+            player2.body.velocity.y = -paddleSpeed;
+        } else {
+            player2.body.velocity.setTo(0, 0);
+        }
     } else {
-        player2.body.velocity.setTo(0, 0);
+        singlelpayerAI()
     }
 
     if (serve && serveKey.isDown) {
-        serveSound.play();
-        BallMove();
-    }
+            serveSound.play();
+            BallMove();
+        }
 }
 
 function render() {
